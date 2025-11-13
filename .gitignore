@@ -31,7 +31,12 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+# Ignore local env files but allow a tracked example like .env.example
+.env.local
+.env.*.local
+.env.test
+.env.production
+.env.development
 
 # vercel
 .vercel
