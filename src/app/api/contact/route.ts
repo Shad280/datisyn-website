@@ -23,6 +23,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("Local test - skipping email send. Message:", { name, email, industry, challenge, message });
+      return NextResponse.json({ ok: true });
+    }
+
     sgMail.setApiKey(SENDGRID_API_KEY);
 
     const msg = {
