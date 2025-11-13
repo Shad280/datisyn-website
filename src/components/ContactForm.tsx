@@ -14,19 +14,11 @@ export default function ContactForm() {
     setError(null);
     
     const fd = new FormData(e.currentTarget);
-    const payload = {
-      name: fd.get("name"),
-      email: fd.get("email"),
-      industry: fd.get("industry"),
-      challenge: fd.get("challenge"),
-      message: fd.get("message")
-    };
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: fd,
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Failed");

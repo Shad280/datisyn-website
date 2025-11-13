@@ -3,8 +3,12 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { name, email, message } = body;
+    const fd = await req.formData();
+    const name = fd.get("name") as string;
+    const email = fd.get("email") as string;
+    const industry = fd.get("industry") as string;
+    const challenge = fd.get("challenge") as string;
+    const message = fd.get("message") as string;
 
     if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -25,8 +29,8 @@ export async function POST(req: Request) {
       to,
       from,
       subject: `Demo request from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-      html: `<p><b>Name:</b> ${name}</p><p><b>Email:</b> ${email}</p><p>${message}</p>`,
+      text: `Name: ${name}\nEmail: ${email}\nIndustry: ${industry}\nChallenge: ${challenge}\n\n${message}`,
+      html: `<p><b>Name:</b> ${name}</p><p><b>Email:</b> ${email}</p><p><b>Industry:</b> ${industry}</p><p><b>Challenge:</b> ${challenge}</p><p>${message}</p>`,
     };
 
     await sgMail.send(msg as any);
