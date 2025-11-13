@@ -18,6 +18,8 @@ export async function POST(req: Request) {
     const from = process.env.SMTP_FROM;
     const to = process.env.CONTACT_RECEIVER;
 
+    console.log("Env vars check:", { hasKey: !!SENDGRID_API_KEY, keyStarts: SENDGRID_API_KEY?.startsWith('SG.'), hasFrom: !!from, hasTo: !!to });
+
     if (!SENDGRID_API_KEY || !from || !to) {
       console.error("Missing SendGrid env vars", { hasKey: !!SENDGRID_API_KEY, hasFrom: !!from, hasTo: !!to });
       return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
