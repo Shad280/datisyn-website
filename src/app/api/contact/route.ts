@@ -18,10 +18,15 @@ export async function POST(req: Request) {
     const from = process.env.SMTP_FROM;
     const to = process.env.CONTACT_RECEIVER;
 
-  // Show a short, masked preview of the key for debugging (first 4 chars + length).
-  // Remove this logging after you confirm the value in Railway.
-  const keyPreview = SENDGRID_API_KEY ? `${SENDGRID_API_KEY.slice(0,4)}... (len=${SENDGRID_API_KEY.length})` : undefined;
-  console.log("Env vars check:", { hasKey: !!SENDGRID_API_KEY, keyStarts: SENDGRID_API_KEY?.startsWith('SG.'), hasFrom: !!from, hasTo: !!to, keyPreview });
+  // Prepare and log a short, masked preview of the key for debugging (first 6 chars + length).
+  // Also sanitize common paste problems (trim whitespace and surrounding quotes) before using.
+  const rawKey = SENDGRID_API_KEY;
+  const cleanedKey = rawKey ? rawKey.trim().replace(/^\"|\"$|^'|'$/g, "") : rawKey;
+  const keyPreviewRaw = rawKey ? `${rawKey.slice(0,6)}... (len=${rawKey.length})` : undefined;
+  const keyPreviewClean = cleanedKey ? `${cleanedKey.slice(0,6)}... (len=${cleanedKey.length})` : undefined;
+  // Also show character codes for the first 6 characters of the raw value to detect invisible chars (won't reveal full key).
+  const charCodes = rawKey ? Array.from(rawKey.slice(0,6)).map(c => c.charCodeAt(0)) : undefined;
+  console.log("Env vars check:", { hasKey: !!rawKey, keyStartsRaw: rawKey?.startsWith('SG.'), keyStartsClean: cleanedKey?.startsWith('SG.'), hasFrom: !!from, hasTo: !!to, keyPreviewRaw, keyPreviewClean, charCodes });
 
     if (!SENDGRID_API_KEY || !from || !to) {
       console.error("Missing SendGrid env vars", { hasKey: !!SENDGRID_API_KEY, hasFrom: !!from, hasTo: !!to });
@@ -33,7 +38,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    sgMail.setApiKey(SENDGRID_API_KEY);
+  // Use the cleaned key to set SendGrid API key
+  sgMail.setApiKey(cleanedKey as string);
 
     const msg = {
       to,
