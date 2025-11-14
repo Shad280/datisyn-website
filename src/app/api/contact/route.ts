@@ -18,7 +18,10 @@ export async function POST(req: Request) {
     const from = process.env.SMTP_FROM;
     const to = process.env.CONTACT_RECEIVER;
 
-    console.log("Env vars check:", { hasKey: !!SENDGRID_API_KEY, keyStarts: SENDGRID_API_KEY?.startsWith('SG.'), hasFrom: !!from, hasTo: !!to });
+  // Show a short, masked preview of the key for debugging (first 4 chars + length).
+  // Remove this logging after you confirm the value in Railway.
+  const keyPreview = SENDGRID_API_KEY ? `${SENDGRID_API_KEY.slice(0,4)}... (len=${SENDGRID_API_KEY.length})` : undefined;
+  console.log("Env vars check:", { hasKey: !!SENDGRID_API_KEY, keyStarts: SENDGRID_API_KEY?.startsWith('SG.'), hasFrom: !!from, hasTo: !!to, keyPreview });
 
     if (!SENDGRID_API_KEY || !from || !to) {
       console.error("Missing SendGrid env vars", { hasKey: !!SENDGRID_API_KEY, hasFrom: !!from, hasTo: !!to });
@@ -43,8 +46,13 @@ export async function POST(req: Request) {
     await sgMail.send(msg as any);
 
     return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("contact error", err);
+  } catch (err: any) {
+    // Log SendGrid response body if available for more actionable errors (without exposing API key).
+    if (err?.response?.body) {
+      console.error("contact error - sendgrid response:", JSON.stringify(err.response.body));
+    } else {
+      console.error("contact error", err);
+    }
     return NextResponse.json({ error: "Failed to send" }, { status: 500 });
   }
 }
