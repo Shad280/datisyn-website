@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -69,6 +70,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Analytics - replace G-XXXXXXXXXX with your Measurement ID */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXXXXXXX');`}
+        </Script>
+
+        {/* JSON-LD Organization structured data for SEO */}
+        <Script id="json-ld" type="application/ld+json" strategy="afterInteractive">
+          {`{
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "Datisyn",
+            "url": "https://datisyn.com",
+            "logo": "https://datisyn.com/logo.png",
+            "description": "AI-Powered Data Orchestration Platform",
+            "contactPoint": [{
+              "@type": "ContactPoint",
+              "email": "info@datisyn.com",
+              "contactType": "sales"
+            }]
+          }`}
+        </Script>
+      </head>
       <body className={`${inter.className} antialiased bg-[var(--background)] text-[var(--foreground)]`}>
         <BackgroundFX />
         <Navbar />
