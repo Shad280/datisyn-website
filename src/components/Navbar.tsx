@@ -36,7 +36,10 @@ export default function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       className="flex justify-between items-center px-6 md:px-10 py-4 bg-[color-mix(in_oklab,transparent,oklch(53%_0.13_260/1)_30%)] backdrop-blur-md fixed top-0 left-0 w-full z-50 border-b border-white/5"
     >
-      <h1 className="text-xl font-extrabold tracking-wide text-white">DATISYN</h1>
+      <a href="/" className="flex items-center gap-3">
+        <img src="/logo-refined.svg" alt="Datisyn" width={36} height={36} className="w-9 h-9" />
+        <span className="hidden sm:inline text-xl font-extrabold tracking-wide text-white">DATISYN</span>
+      </a>
       <div className="hidden md:flex items-center gap-8 font-medium">
         <a href="#features" className={linkClass("features")}>Features</a>
         <a href="#solution" className={linkClass("solution")}>Solution</a>

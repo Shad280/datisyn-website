@@ -64,7 +64,8 @@ function Particles() {
           void main(){
             vColor = color;
             vec3 p = position;
-            float wobble = sin(uTime + length(p)*0.5)*0.06;
+            // subtle oscillation so particles sometimes nudge inward or outward
+            float wobble = sin(uTime * 0.7 + length(p) * 0.3) * 0.02;
             p += normalize(p) * wobble;
             vec4 mvPosition = modelViewMatrix * vec4(p,1.0);
             gl_PointSize = uSize * (1.0 / -mvPosition.z);

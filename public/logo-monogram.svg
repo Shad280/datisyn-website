@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="Datisyn monogram">
+  <defs>
+    <linearGradient id="gm" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2AB3FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="160" height="160" rx="20" fill="#0B2545" />
+
+  <!-- Monogram: stylized D + S merged into a single mark -->
+  <g transform="translate(32,32)" fill="none" stroke="url(#gm)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- D shape -->
+    <path d="M8 64 L8 16 C8 12 12 8 16 8 L44 8 C64 8 80 28 80 64 C80 100 64 120 44 120 L16 120 C12 120 8 116 8 112 Z" stroke-opacity="0.95" />
+    <!-- S hint inside D -->
+    <path d="M72 32 C56 16, 32 20, 32 40 C32 60, 56 56, 56 72 C56 88, 36 92, 28 112" stroke="#FFD166" stroke-width="6"/>
+  </g>
+</svg>

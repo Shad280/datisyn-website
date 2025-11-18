@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Datisyn mark">
+  <defs>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2AB3FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="120" height="120" rx="24" fill="#fff"/>
+
+  <g transform="translate(10,12)">
+    <path d="M0 44 C0 20 20 0 44 0 L64 0" fill="none" stroke="url(#g2)" stroke-width="10" stroke-linecap="round"/>
+    <path d="M60 8 L100 44 L60 80" fill="none" stroke="#9AD8FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="100" cy="44" r="7" fill="#2AB3FF"/>
+    <circle cx="70" cy="30" r="5" fill="#FFD166"/>
+    <circle cx="70" cy="58" r="5" fill="#7AE582"/>
+  </g>
+</svg>

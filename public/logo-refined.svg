@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Datisyn refined mark">
+  <defs>
+    <linearGradient id="strokeGrad" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2AB3FF"/>
+      <stop offset="60%" stop-color="#00B3FF"/>
+      <stop offset="100%" stop-color="#0066FF"/>
+    </linearGradient>
+    <radialGradient id="bgGrad" cx="50%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#071526"/>
+      <stop offset="100%" stop-color="#031424"/>
+    </radialGradient>
+
+    <!-- subtle glow for the strokes -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- background removed so the mark sits on the navbar's translucent background -->
+  <!-- transparent background allows the Navbar blur/color to show through -->
+
+  <!-- concentric rounded diamonds (rotated squares) -->
+  <!-- larger outer ring -->
+  <g transform="translate(256,256)">
+    <rect x="-170" y="-170" width="340" height="340" rx="36" fill="none" stroke="url(#strokeGrad)" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)" transform="rotate(45)" />
+    <rect x="-128" y="-128" width="256" height="256" rx="28" fill="none" stroke="url(#strokeGrad)" stroke-width="9" stroke-linejoin="round" stroke-linecap="round" transform="rotate(45)" opacity="0.95" />
+    <rect x="-86" y="-86" width="172" height="172" rx="22" fill="none" stroke="url(#strokeGrad)" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" transform="rotate(45)" opacity="0.98" />
+    <rect x="-44" y="-44" width="88" height="88" rx="14" fill="none" stroke="url(#strokeGrad)" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" transform="rotate(45)" />
+
+    <!-- inner node -->
+    <rect x="-14" y="-14" width="28" height="28" rx="6" fill="#00B3FF" transform="rotate(45)" />
+  </g>
+
+</svg>

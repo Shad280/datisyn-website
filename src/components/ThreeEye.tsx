@@ -344,22 +344,24 @@ function DataOrchestrationViz({
       material.opacity = 0.35 + Math.sin(t * 1.5) * 0.15;
     }
 
-    // Animate flow particles
+    // Animate flow particles moving INWARDS toward the center
     if (flowParticlesRef.current) {
       const positions = flowParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      
+
       for (let i = 0; i < positions.length / 3; i++) {
         const nodeIndex = Math.floor(i / 5) % (nodes.length - 1) + 1;
         const targetPos = nodes[nodeIndex].position;
         const speed = flowParticles.speeds[i];
-        
+
+        // progress goes 0 -> 1 repeatedly; invert to move from node -> center
         let progress = ((t * speed) % 1);
-        
-        positions[i * 3] = targetPos.x * progress;
-        positions[i * 3 + 1] = targetPos.y * progress;
-        positions[i * 3 + 2] = targetPos.z * progress;
+        const inward = 1 - progress;
+
+        positions[i * 3] = targetPos.x * inward;
+        positions[i * 3 + 1] = targetPos.y * inward;
+        positions[i * 3 + 2] = targetPos.z * inward;
       }
-      
+
       flowParticlesRef.current.geometry.attributes.position.needsUpdate = true;
     }
   });
@@ -414,8 +416,7 @@ function DataOrchestrationViz({
 
 function DataParticles() {
   const particlesRef = useRef<THREE.Points>(null);
-
-  const { positions, colors } = useMemo(() => {
+  const { positions, colors, count } = useMemo(() => {
     const count = 60;
     const pos = new Float32Array(count * 3);
     const cols = new Float32Array(count * 3);
@@ -425,7 +426,7 @@ function DataParticles() {
       const radius = 1.5 + Math.random() * 2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
-      
+
       pos[i3] = radius * Math.sin(phi) * Math.cos(theta);
       pos[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
       pos[i3 + 2] = radius * Math.cos(phi);
@@ -436,11 +437,56 @@ function DataParticles() {
       cols[i3 + 2] = color.b;
     }
 
-    return { positions: pos, colors: cols };
+    return { positions: pos, colors: cols, count };
   }, []);
+
+  // timers controlling occasional inward attraction for stray particles
+  const attractTimersRef = useRef<Float32Array | null>(null);
+  if (!attractTimersRef.current) attractTimersRef.current = new Float32Array((positions.length / 3));
 
   useFrame((state) => {
     if (particlesRef.current) {
+      const positionsArr = particlesRef.current.geometry.attributes.position.array as Float32Array;
+      const timers = attractTimersRef.current!;
+
+      for (let i = 0; i < positionsArr.length; i += 3) {
+        const idx = i / 3;
+
+        if (timers[idx] > 0) {
+          // particle is currently attracted: move inward faster
+          positionsArr[i] *= 0.94;
+          positionsArr[i + 1] *= 0.94;
+          positionsArr[i + 2] *= 0.94;
+          timers[idx] -= 1;
+        } else {
+          // mostly stray behavior: small jitter and slow orbital drift
+          positionsArr[i] += (Math.random() - 0.5) * 0.008;
+          positionsArr[i + 1] += (Math.random() - 0.5) * 0.008;
+          positionsArr[i + 2] += (Math.random() - 0.5) * 0.008;
+
+          // occasional chance to become attracted for a short period
+          if (Math.random() < 0.004) {
+            timers[idx] = 90 + Math.floor(Math.random() * 120); // frames attracted (~1.5-3.5s)
+          }
+        }
+
+        // respawn outward if the particle reached center
+        const x = positionsArr[i];
+        const y = positionsArr[i + 1];
+        const z = positionsArr[i + 2];
+        const distSq = x * x + y * y + z * z;
+        if (distSq < 0.0025) {
+          const radius = 1.5 + Math.random() * 2;
+          const theta = Math.random() * Math.PI * 2;
+          const phi = Math.random() * Math.PI;
+          positionsArr[i] = radius * Math.sin(phi) * Math.cos(theta);
+          positionsArr[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+          positionsArr[i + 2] = radius * Math.cos(phi);
+          timers[idx] = 0;
+        }
+      }
+
+      particlesRef.current.geometry.attributes.position.needsUpdate = true;
       particlesRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
       particlesRef.current.rotation.x = state.clock.getElapsedTime() * 0.08;
     }

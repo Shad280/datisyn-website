@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Datisyn geometric mark">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0%" stop-color="#2AB3FF" />
+      <stop offset="100%" stop-color="#0066FF" />
+    </linearGradient>
+  </defs>
+
+  <rect width="120" height="120" fill="#FFFFFF" rx="10" />
+
+  <!-- Geometric grid mark (mark-only) -->
+  <g transform="translate(12,12)">
+    <rect x="0" y="0" width="96" height="96" rx="16" fill="url(#g)" opacity="0.98" />
+    <g transform="translate(12,12)" fill="#fff">
+      <circle cx="28" cy="28" r="8" />
+      <rect x="64" y="16" width="16" height="32" rx="4" />
+      <polygon points="8,72 48,40 88,72" opacity="0.12" />
+    </g>
+  </g>
+
+</svg>
